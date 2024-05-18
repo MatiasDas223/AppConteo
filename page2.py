@@ -18,7 +18,7 @@ def page2():
     st.title(f"Ingreso de Datos para {st.session_state['sucursal']} - {st.session_state['linea']}")
     
     codigo_plu_desc = st.selectbox("Selecciona Código - PLU - Descripción", df_codigos_filtrado["Codigo - PLU - Desc"].unique(), key="codigo_plu_desc")
-    cantidad = st.number_input("Cantidad", min_value=0.00, value=0.00,step = 0.01, key="cantidad")
+    cantidad = st.number_input("Cantidad", min_value=0.0, step=0.1, format="%.3f", key="cantidad")
     
     if st.button("Agregar"):
         df = pd.read_excel(file_path)
@@ -53,7 +53,7 @@ def page2():
     
         if st.session_state.get(f"editing_{index}", False):
             nuevo_codigo_plu_desc = st.selectbox("Nuevo Código - PLU - Descripción", df_codigos_filtrado["Codigo - PLU - Desc"].unique(), key=f"new_codigo_plu_desc_{index}")
-            nueva_cantidad = st.number_input("Nueva Cantidad", min_value=0.00, value=float(row['Cantidad']), step = 0.01, key=f"new_cantidad_{index}")
+            nueva_cantidad = st.number_input("Nueva Cantidad", min_value=0.0, value=float(row['Cantidad']), step=0.1, format="%.2f", key=f"new_cantidad_{index}")
             if st.button("Guardar", key=f"save_{index}"):
                 registro_editado = df_codigos_filtrado[df_codigos_filtrado["Codigo - PLU - Desc"] == nuevo_codigo_plu_desc].iloc[0]
                 df_mostrar.at[index, 'Código'] = registro_editado["Codigo"]
@@ -64,4 +64,4 @@ def page2():
                 st.session_state[f"editing_{index}"] = False
                 st.experimental_rerun()
         st.write("----")
-
+    st.dataframe(df_mostrar, hide_index=True)
